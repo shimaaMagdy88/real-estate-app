@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from datetime import date
 
 
 class Property(models.Model):
@@ -11,6 +12,8 @@ class Property(models.Model):
     description = fields.Text(default='New')
     postcode = fields.Char()
     date_availability = fields.Date(tracking=True)
+    date_expected_selling = fields.Date(tracking=True)
+    is_late = fields.Boolean()
     expected_price = fields.Float(digits=(0, 4))
     selling_price = fields.Float()
     diff = fields.Float(compute='_compute_diff')
@@ -31,8 +34,9 @@ class Property(models.Model):
     state = fields.Selection([('draft', 'Draft'),
                               ('pending', 'Pending'),
                               ('sold', 'Sold'),
-                              ('cancel', 'Cancel')], default='draft')
+                              ('closed', 'Closed')], default='draft')
     property_line_ids = fields.One2many('property.line', 'property_id')
+    active = fields.Boolean(default=True)
 
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'this name is exist!')
@@ -61,25 +65,25 @@ class Property(models.Model):
 
     def action_draft(self):
         for rec in self:
-            self.state = 'draft'
+            rec.state = 'draft'
 
     def action_pending(self):
         for rec in self:
-            self.state = 'pending'
+            rec.state = 'pending'
 
     def action_sold(self):
         for rec in self:
-            self.state = 'sold'
+            rec.state = 'sold'
+
+    def action_closed(self):
+        for rec in self:
+            rec.state = 'closed'
 
     @api.depends('expected_price', 'selling_price', 'owner_id.phone')
     def _compute_diff(self):
         for rec in self:
             rec.diff = rec.expected_price - rec.selling_price
             print('diff dependancy')
-
-    # @api.model
-    # def _sendone(self, channel, notification_type, message):
-    #     self._sendmany([[channel, notification_type, message]])
 
     @api.onchange('description')
     def onchange_description(self):
@@ -89,12 +93,13 @@ class Property(models.Model):
                 'warning': {'type': 'notification', 'title': 'warning', 'message': 'description has been changed'}
             }
 
-            # self.env['property']._sendone(self.env.user.partner_id, 'simple_notification', {
-            #     'title': _('Missing Library'),
-            #     'message': 'how are you',
-            #     'sticky': True,
-            #     'warning': True,
-            # })
+    def expected_selling_date(self):
+        print('inside check expected selling date')
+        property_ids = self.search([])
+
+        for rec in property_ids:
+            if rec.date_expected_selling and date.today() > rec.date_expected_selling and rec.state in ['draft', 'pending']:
+                rec.is_late = True
 
 
 class PropertyLine(models.Model):

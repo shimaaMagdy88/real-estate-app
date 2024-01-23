@@ -3,7 +3,7 @@
 }
 .header_custom table thead tr{
     color: white !important;
-    text-align: center;
+    text-align: left;
 }
 .header_custom table thead > tr > th:nth-child(2){
     width: 200px !important;

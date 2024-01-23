@@ -4,14 +4,16 @@
         <field name="name">Property Tree</field>
         <field name="model">property</field>
         <field name="arch" type="xml">
-            <tree multi_edit="1" class="header_custom">
+            <tree multi_edit="1" class="header_custom" decoration-danger="(is_late)">
                 <field name="name"/>
                 <field name="postcode"/>
                 <field name="date_availability"/>
+                <field name="date_expected_selling"/>
                 <field name="garden"/>
                 <field name="garden_orientation"/>
                 <field name="garden_area" optional="1"/>
                 <field name="state"/>
+                <field name="is_late" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -22,8 +24,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold"/>
-                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
+                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel,closed" class="btn-primary"/>
                     <button name="action_pending" type="object" string="Pending" states="draft" class="btn-secondary"/>
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
                 </header>
@@ -39,7 +41,9 @@
                             <field name="expected_price"/>
                             <field name="selling_price"/>
                             <field name="diff"/>
-                            <field name="date_availability" required="1"/>
+                            <field name="date_availability"/>
+                            <field name="date_expected_selling"/>
+                            <field name="is_late" invisible="1"/>
                         </group>
                         <group string="Additional Info">
                             <field name="postcode"/>
@@ -54,6 +58,7 @@
                             <field name="owner_id"/>
                             <field name="owner_phone"/>
                             <field name="owner_address"/>
+                            <field name="active" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -88,7 +93,7 @@
                 <filter name="filter_garden" string="With Garden" domain="[('garden','=',True)]"/>
                 <filter name="filter_not_garden" string="Without Garden" domain="[('garden','=',False)]"/>
                 <filter name="filter_garage" string="With Garage" domain="[('garage','=',True)]"/>
-
+                <filter name="filter_active" string="Archived" domain="[('active','=',False)]"/>
                 <group>
                     <filter name="group_by_garden" string="Garden" context="{'group_by': 'garden'}"/>
                 </group>
@@ -99,6 +104,28 @@
     <record id="property_action" model="ir.actions.act_window">
         <field name="name">Property Action</field>
         <field name="res_model">property</field>
+    </record>
+
+    <record id="property_closed_server_action" model="ir.actions.server">
+        <field name="name">Closed</field>
+        <field name="model_id" ref="model_property"/>
+        <field name="binding_model_id" ref="model_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_closed()
+        </field>
+    </record>
+
+    <record id="check_selling_date_cron" model="ir.cron">
+        <field name="name">Property: check selling date</field>
+        <field name="model_id" ref="model_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            model.expected_selling_date()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
     </record>
 
     <menuitem
