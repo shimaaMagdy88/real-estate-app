@@ -25,6 +25,7 @@
                         </group>
                         <group>
                             <field name="address"/>
+                            <field name="user_id"/>
                         </group>
                     </group>
                     <notebook>
@@ -37,7 +38,6 @@
                                     <field name="date_availability"/>
                                 </tree>
                             </field>
-
                         </page>
                     </notebook>
                 </sheet>
@@ -48,6 +48,7 @@
     <record id="owner_action" model="ir.actions.act_window">
         <field name="name">Owner Action</field>
         <field name="res_model">owner</field>
+        <field name="context">{'default_user_id': uid}</field>
     </record>
 
     <menuitem id="owner_menu"

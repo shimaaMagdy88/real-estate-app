@@ -1,0 +1,60 @@
+<odoo>
+    <record id="property_history_report" model="ir.actions.report">
+        <field name="name">Property History Report</field>
+        <field name="model">property.history</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="binding_model_id" ref="model_property_history"/>
+        <field name="binding_type">report</field>
+        <field name="report_name">app_one.property_history_report_template</field>
+    </record>
+
+    <template id="property_history_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <style>
+                    table{
+                        width: 100%;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    table thead tr{
+                        background-color: lightgray;
+                    }
+                </style>
+                <h1 class="pb-5">Property History Report</h1>
+                <table class="table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Property</th>
+                            <th>Old State</th>
+                            <th>New State</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <td>
+                                    <span t-field="o.user_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.property_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.old_state"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.new_state"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.create_date"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -25,13 +25,20 @@
             <form>
                 <header>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
-                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel,closed" class="btn-primary"/>
+                    <button name="action" type="object" string="Action"/>
+                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel" class="btn-primary"/>
                     <button name="action_pending" type="object" string="Pending" states="draft" class="btn-secondary"/>
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
                 </header>
                 <sheet>
+                    <h1>
+                        <field name="ref"/>
+                    </h1>
                     <div class="oe_title">
-                        <field name="name"/>
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" attrs="{'readonly': [('state', '=', 'closed')]}"/>
+                        </h1>
                     </div>
                     <group>
                         <group string="General Info">

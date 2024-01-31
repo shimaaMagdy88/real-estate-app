@@ -9,6 +9,7 @@ class Property(models.Model):
     _description = 'Property'
 
     name = fields.Char(required=True, size=15, tracking=True)
+    ref = fields.Char(default='New', readonly=True)
     description = fields.Text(default='New')
     postcode = fields.Char()
     date_availability = fields.Date(tracking=True)
@@ -50,9 +51,8 @@ class Property(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(Property, self).create(vals)
-        print('inside create method')
-        return res
+        vals['ref'] = self.env['ir.sequence'].next_by_code('property_seq')
+        return super(Property, self).create(vals)
 
     def write(self, vals):
         res = super(Property, self).write(vals)
@@ -65,18 +65,22 @@ class Property(models.Model):
 
     def action_draft(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'draft')
             rec.state = 'draft'
 
     def action_pending(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'pending')
             rec.state = 'pending'
 
     def action_sold(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'sold')
             rec.state = 'sold'
 
     def action_closed(self):
         for rec in self:
+            rec.create_history_record(rec.state, 'closed')
             rec.state = 'closed'
 
     @api.depends('expected_price', 'selling_price', 'owner_id.phone')
@@ -100,6 +104,19 @@ class Property(models.Model):
         for rec in property_ids:
             if rec.date_expected_selling and date.today() > rec.date_expected_selling and rec.state in ['draft', 'pending']:
                 rec.is_late = True
+
+    def action(self):
+        pass
+
+    def create_history_record(self, old_state, new_state):
+        for rec in self:
+            history_dict = {
+                'user_id': rec.env.uid,
+                'property_id': rec.id,
+                'old_state': old_state,
+                'new_state': new_state
+            }
+            history_id = self.env['property.history'].create(history_dict)
 
 
 class PropertyLine(models.Model):
