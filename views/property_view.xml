@@ -25,7 +25,7 @@
             <form>
                 <header>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
-                    <button name="action" type="object" string="Action"/>
+<!--                    <button name="action" type="object" string="Action"/>-->
                     <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel" class="btn-primary"/>
                     <button name="action_pending" type="object" string="Pending" states="draft" class="btn-secondary"/>
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
@@ -67,13 +67,17 @@
                             <field name="owner_address"/>
                             <field name="active" invisible="1"/>
                         </group>
+                        <group string="Other">
+                             <field name="creation_time"/>
+                             <field name="next_time"/>
+                        </group>
                     </group>
                     <notebook>
                         <page name="property_line_ids" string="Bedrooms">
                             <field name="property_line_ids">
                                 <tree editable="bottom">
-                                    <field name="description"/>
                                     <field name="area"/>
+                                    <field name="description"/>
                                 </tree>
                             </field>
                         </page>
@@ -113,13 +117,23 @@
         <field name="res_model">property</field>
     </record>
 
-    <record id="property_closed_server_action" model="ir.actions.server">
-        <field name="name">Closed</field>
+    <record id="property_closed_action" model="ir.actions.server">
+        <field name="name">Closing</field>
         <field name="model_id" ref="model_property"/>
         <field name="binding_model_id" ref="model_property"/>
         <field name="state">code</field>
         <field name="code">
             action = records.action_closed()
+        </field>
+    </record>
+
+    <record id="change_state_server_action" model="ir.actions.server">
+        <field name="name">Change State</field>
+        <field name="model_id" ref="model_property"/>
+        <field name="binding_model_id" ref="model_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_open_change_state_wizard()
         </field>
     </record>
 

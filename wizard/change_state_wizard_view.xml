@@ -1,3 +1,32 @@
 <odoo>
-    
+
+    <record id="change_state_wizard_view_form" model="ir.ui.view">
+        <field name="name">Change State Wizard Form</field>
+        <field name="model">change.state</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="property_id" invisible="1"/>
+                            <field name="state"/>
+                            <field name="reason"/>
+                        </group>
+                        <footer>
+                            <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"/>
+                            <button string="Cancel" special="cancel"/>
+                        </footer>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="change_state_wizard_action" model="ir.actions.act_window">
+        <field name="name">Change State Wizard Action</field>
+        <field name="res_model">change.state</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+
 </odoo>

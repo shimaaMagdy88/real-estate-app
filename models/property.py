@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from datetime import date
+from datetime import date, timedelta
 
 
 class Property(models.Model):
@@ -38,6 +38,8 @@ class Property(models.Model):
                               ('closed', 'Closed')], default='draft')
     property_line_ids = fields.One2many('property.line', 'property_id')
     active = fields.Boolean(default=True)
+    creation_time = fields.Datetime(readonly=True, default=fields.Datetime.now)
+    next_time = fields.Datetime(compute='_compute_next_time')
 
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'this name is exist!')
@@ -108,15 +110,30 @@ class Property(models.Model):
     def action(self):
         pass
 
-    def create_history_record(self, old_state, new_state):
+    def create_history_record(self, old_state, new_state, reason=''):
         for rec in self:
             history_dict = {
                 'user_id': rec.env.uid,
                 'property_id': rec.id,
                 'old_state': old_state,
-                'new_state': new_state
+                'new_state': new_state,
+                'reason': reason or "",
+                'property_history_line_ids': [(0, 0, {'description': line.description, 'area': line.area}) for line in rec.property_line_ids]
             }
             history_id = self.env['property.history'].create(history_dict)
+
+    def action_open_change_state_wizard(self):
+        action = self.env.ref('app_one.change_state_wizard_action').read()[0]
+        action['context'] = {'default_property_id': self.id}
+        return action
+
+    @api.depends('creation_time')
+    def _compute_next_time(self):
+        for rec in self:
+            if rec.creation_time:
+                rec.next_time = rec.creation_time + timedelta(hours=6)
+            else:
+                rec.next_time = False
 
 
 class PropertyLine(models.Model):
