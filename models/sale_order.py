@@ -10,3 +10,9 @@ class SaleOrder(models.Model):
         print('hello from inheriting action_confirm method')
         return res
 
+    # @api.model
+    # def create(self, vals):
+    #     result = super(SaleOrder, self).create(vals)
+    #     result.name = result.name + ' (draft)'
+    #     return result
+

@@ -8,7 +8,7 @@ class Property(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Property'
 
-    name = fields.Char(required=True, size=15, tracking=True)
+    name = fields.Char(required=True, size=40, tracking=True, translate=True)
     ref = fields.Char(default='New', readonly=True)
     description = fields.Text(default='New')
     postcode = fields.Char()
@@ -44,6 +44,14 @@ class Property(models.Model):
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'this name is exist!')
     ]
+
+    def copy(self, default=None):
+        if default is None:
+            default = {}
+        if not default.get('name'):
+            default['name'] = self.name + ' (copy)'
+
+        return super(Property, self).copy(default)
 
     @api.constrains('bedrooms')
     def check_bedrooms_greater_zero(self):

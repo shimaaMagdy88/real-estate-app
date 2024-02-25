@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_appointment_form_inherit" model="ir.ui.view">
+        <field name="name">appointment view form inherit</field>
+        <field name="model">hospital.appointment</field>
+        <field name="inherit_id" ref="view_hospital_appointment_form"/>
+        <field name="arch" type="xml">
+         	<xpath expr="//button[@name='action_post']" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

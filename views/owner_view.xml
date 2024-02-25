@@ -17,6 +17,9 @@
         <field name="model">owner</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_test" type="object" string="Test" class="oe_highlight"/>
+                </header>
                 <sheet>
                     <group>
                         <group>

@@ -26,7 +26,8 @@
                 <header>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
 <!--                    <button name="action" type="object" string="Action"/>-->
-                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel" class="btn-primary"/>
+                    <button name="action_draft" type="object" string="Reset To Draft" states="pending,sold,cancel" class="btn-primary"
+                            groups="app_one.property_manager_group"/>
                     <button name="action_pending" type="object" string="Pending" states="draft" class="btn-secondary"/>
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
                 </header>
@@ -115,6 +116,7 @@
     <record id="property_action" model="ir.actions.act_window">
         <field name="name">Property Action</field>
         <field name="res_model">property</field>
+        <field name="domain">[]</field>
     </record>
 
     <record id="property_closed_action" model="ir.actions.server">
