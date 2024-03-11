@@ -32,6 +32,11 @@
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible':[('active','=',True)]}"/>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="open_related_owner_button" type="object" string="Owner" icon="fa-user"
+                                attrs="{'invisible':[('owner_id','=',False)]}" class="oe_stat_button"/>
+                    </div>
                     <h1>
                         <field name="ref"/>
                     </h1>
@@ -43,6 +48,7 @@
                     </div>
                     <group>
                         <group string="General Info">
+<!--                            <field name="currency_id"/>-->
                             <field name="description"/>
                             <field name="bedrooms"/>
                             <field name="garden"/>

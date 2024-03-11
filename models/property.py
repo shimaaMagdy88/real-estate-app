@@ -9,6 +9,7 @@ class Property(models.Model):
     _description = 'Property'
 
     name = fields.Char(required=True, size=40, tracking=True, translate=True)
+    # currency_id = fields.Many2one('res.currency', compute='_get_company_currency')
     ref = fields.Char(default='New', readonly=True)
     description = fields.Text(default='New')
     postcode = fields.Char()
@@ -44,6 +45,10 @@ class Property(models.Model):
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'this name is exist!')
     ]
+
+    # def _get_company_currency(self):
+    #     for rec in self:
+    #         rec.currency_id = self.env.ref('base.USD').id
 
     def copy(self, default=None):
         if default is None:
@@ -142,6 +147,15 @@ class Property(models.Model):
                 rec.next_time = rec.creation_time + timedelta(hours=6)
             else:
                 rec.next_time = False
+
+    def open_related_owner_button(self):
+        action = self.env['ir.actions.actions']._for_xml_id('app_one.owner_action')
+        view_id = self.env.ref('app_one.owner_view_form').id
+
+        action['res_id'] = self.owner_id.id
+        action['views'] = [[view_id, 'form']]
+
+        return action
 
 
 class PropertyLine(models.Model):

@@ -12,3 +12,4 @@ class Building(models.Model):
     description = fields.Text()
     name = fields.Char()
     active = fields.Boolean(default=True)
+
