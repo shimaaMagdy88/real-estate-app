@@ -1,3 +1,6 @@
+import json
+
+import requests
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import date, timedelta
@@ -36,19 +39,38 @@ class Property(models.Model):
     state = fields.Selection([('draft', 'Draft'),
                               ('pending', 'Pending'),
                               ('sold', 'Sold'),
-                              ('closed', 'Closed')], default='draft')
+                              ('closed', 'Closed')], default='draft', tracking=True,)
     property_line_ids = fields.One2many('property.line', 'property_id')
     active = fields.Boolean(default=True)
     creation_time = fields.Datetime(readonly=True, default=fields.Datetime.now)
     next_time = fields.Datetime(compute='_compute_next_time')
+    owner_gender = fields.Selection(related='owner_id.gender')
 
     _sql_constraints = [
         ('unique_name', 'unique("name")', 'this name is exist!')
     ]
 
+    # @api.onchange('state')
+    # def onchange_state(self):
+    #     print('state changed')
+
     # def _get_company_currency(self):
     #     for rec in self:
-    #         rec.currency_id = self.env.ref('base.USD').id
+    #         rec.currency_id = self.env.ref('base.USD').
+
+    def get_properties(self):
+        print('get properties')
+        try:
+            payload = dict()
+            response = requests.get('http://127.0.0.1:8015/v1/property/get_all', data=payload)
+            result = json.loads(response.content)
+            print(result)
+            if response.content.status_code == 200:
+                print('succssfull')
+            else:
+                print('failed or not found')
+        except Exception as error:
+            raise ValidationError(str(error))
 
     def copy(self, default=None):
         if default is None:

@@ -25,6 +25,9 @@
                         table .key{
                             background-color: #eee;
                         }
+                        h1{
+                            font-family: "Imbue";
+                        }
                     </style>
                     <h1>Property Report</h1>
                     <table class="table-bordered">

@@ -25,6 +25,7 @@
                         <group>
                             <field name="name"/>
                             <field name="phone"/>
+                            <field name="gender"/>
                         </group>
                         <group>
                             <field name="address"/>
@@ -59,3 +60,12 @@
               parent="configuration_menu"
               action="owner_action"/>
 </odoo>
+
+<!--<field name="invoice_line_ids" widget="section_and_note_one2many" mode="tree,kanban" context="{'default_move_type': context.get('default_move_type'), 'journal_id': journal_id, 'default_partner_id': commercial_partner_id, 'default_currency_id': currency_id or company_currency_id}">-->
+<!--<xpath expr="//field[@name='discount']" position="attributes">-->
+<!--                    <attribute name="digits">[16, 2]</attribute>-->
+<!--                </xpath>-->
+
+<!--<field name="analytic_account_id" domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_accounting" optional="show"/>-->
+<!--<field name="analytic_tag_ids" domain="['|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]" groups="analytic.group_analytic_tags" optional="show" widget="many2many_tags"/>-->
+<!--usd_rate = self.env.company.usd_rate-->

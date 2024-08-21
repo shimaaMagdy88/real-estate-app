@@ -18,12 +18,14 @@
         'views/building_view.xml',
         'views/contact_view.xml',
         'views/property_history_view.xml',
+        'views/controller_views.xml',
         'wizard/change_state_wizard_view.xml',
         'reports/property_report.xml',
         'reports/property_history_report.xml',
     ],
     'assets': {
-        'web.assets_backend': ['app_one\static\src\css\property.css']
+        'web.assets_backend': ['app_one\static\src\css\property.css'],
+        'web.report_assets_common': ['app_one\static\src\css\\font.css'],
     },
     'application': True,
     'license': 'LGPL-3',

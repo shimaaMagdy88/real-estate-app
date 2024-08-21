@@ -9,7 +9,9 @@
                 <field name="postcode"/>
                 <field name="date_availability"/>
                 <field name="date_expected_selling"/>
+                <field name="create_uid"/>
                 <field name="garden"/>
+                <field name="activity_ids"/>
                 <field name="garden_orientation"/>
                 <field name="garden_area" optional="1"/>
                 <field name="state"/>
@@ -30,6 +32,7 @@
                             groups="app_one.property_manager_group"/>
                     <button name="action_pending" type="object" string="Pending" states="draft" class="btn-secondary"/>
                     <button name="action_sold" type="object" string="Sold" states="pending" class="btn-success"/>
+                    <button name="get_properties" type="object" string="Test API method"/>
                 </header>
                 <sheet>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible':[('active','=',True)]}"/>
@@ -49,6 +52,8 @@
                     <group>
                         <group string="General Info">
 <!--                            <field name="currency_id"/>-->
+<!--                            <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"-->
+<!--                                   options="{'clickable':True}"/>-->
                             <field name="description"/>
                             <field name="bedrooms"/>
                             <field name="garden"/>
@@ -69,9 +74,10 @@
                             <field name="tag_ids" widget="many2many_tags"/>
                         </group>
                         <group string="Owner Info">
-                            <field name="owner_id"/>
+                            <field name="owner_id" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create':True}"/>
                             <field name="owner_phone"/>
                             <field name="owner_address"/>
+                            <field name="owner_gender"/>
                             <field name="active" invisible="1"/>
                         </group>
                         <group string="Other">

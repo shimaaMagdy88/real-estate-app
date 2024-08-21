@@ -10,6 +10,7 @@ class Owner(models.Model):
     phone = fields.Char(string='Phone')
     address = fields.Char(string='Address')
     property_ids = fields.One2many('property', 'owner_id')
+    gender = fields.Selection(selection=[('male', 'Male'), ('female', 'Female')])
 
 
 

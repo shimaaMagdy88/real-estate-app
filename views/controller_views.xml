@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="sale_order_template" name="Sales Orders Template">
+        <t t-call="website.layout">
+            <style>
+                table{
+                    margin: 30px 0px;
+                    width: 100%;
+                    padding: 20px;
+                    text-align: center;
+                }
+                table thead tr{
+                    background-color: lightgray;
+                }
+            </style>
+            <div class="oe_structure">
+                <div class="container">
+                    <table class="table-bordered">
+                        <thead>
+                            <tr>
+                                <td>Sale Order</td>
+                                <td>Customer</td>
+                                <td>Date</td>
+                                <td>State</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="my_details" t-as="order">
+                                <tr>
+                                    <td><t t-esc="order.name"/></td>
+                                    <td><t t-esc="order.partner_id.name"/></td>
+                                    <td><t t-esc="order.date_order"/></td>
+                                    <td><t t-esc="order.state"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <form method="POST" action="/new_request_submit">
+                        <label>Name</label>
+                        <input type="text" name="name" id="nameInput"/>
+                        <input type="submit"/>
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

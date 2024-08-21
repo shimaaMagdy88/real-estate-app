@@ -17,14 +17,14 @@
             <field name="category_id" ref="app_one.real_state_category"/>
         </record>
 
-        <record id="property_record_rule_by_user" model="ir.rule">
-            <field name="name">property.by.user</field>
-            <field name="model_id" ref="app_one.model_property"/>
-            <field name="domain_force">[('create_uid', '=', user.id)]</field>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
+<!--        <record id="property_record_rule_by_user" model="ir.rule">-->
+<!--            <field name="name">property.by.user</field>-->
+<!--            <field name="model_id" ref="app_one.model_property"/>-->
+<!--            <field name="domain_force">[('create_uid', '=', user.id)]</field>-->
+<!--            <field name="perm_read" eval="True"/>-->
+<!--            <field name="perm_write" eval="True"/>-->
+<!--            <field name="perm_create" eval="True"/>-->
+<!--            <field name="perm_unlink" eval="True"/>-->
+<!--        </record>-->
     </data>
 </odoo>
